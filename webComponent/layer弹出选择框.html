@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>layer弹出框</title>
+    <script src="./js/jquery-1.8.3.min.js"></script>
+    <script src="./js/layer/layer.js"></script>
+    <script src="./js/jquery-ui-1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet"	href="./js/jquery-ui-1.11.4/jquery-ui.css" />
+</head>
+<script>
+    $(function() {
+        $( "input[type=submit], a, button" )
+            .button()
+            .click(function( event ) {
+                event.preventDefault();
+            });
+    });
+</script>
+<body>
+
+<button onclick="selectImgType()">一个 button 元素</button>
+
+<input type="submit" value="一个提交按钮">
+
+<a href="#">一个锚</a>
+
+</body>
+
+<script>
+    function selectImgType(){
+        var contentHtml = '\<\div style="padding:0px;"><input type="radio" name="chooseImgType" id="chooseLink2" value="1" checked onclick="">单张图片' +
+            '   <input type="radio" name="chooseImgType" id="chooseImgType2" value="2" onclick="">两图并列' +
+            '   <input type="radio" name="chooseImgType" id="chooseImgType3" value="3" onclick="">三图并列' +
+            '   <input type="radio" name="chooseImgType" id="chooseImgType4" value="4" onclick="">四图并列' +
+            '<br><input id="confirmBtn" class="btn2" type="button" style="margin:20px 0px 0px 90px" value="确定" onclick="confirmImgType()">\<\/div>';
+        layer.open({
+            type: 1,
+            title:"您要选哪个？",
+            offset: ['100px', '600px'],
+            area: ['400px', '130px'],
+            shadeClose: true, //点击遮罩关闭
+            content: contentHtml
+        });
+    }
+    function confirmImgType(){
+//        alert($('input:radio[name="chooseImgType"]:checked').val());
+        var imgType = $('input:radio[name="chooseImgType"]:checked').val();
+        alert(imgType + "图");
+        layer.closeAll('page');
+
+    }
+</script>
+
+</html>
