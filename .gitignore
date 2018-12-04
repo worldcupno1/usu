@@ -1,3 +1,20 @@
+# maven output directory
+target
+/build
+/dist
+javadocs
+
+# Eclipse files
+/bin
+.settings
+.classpath
+.project
+
+# IntelliJ files
+/.idea
+*.iml
+/atlassian-ide-plugin.xml
+
 # Compiled class file
 *.class
 
