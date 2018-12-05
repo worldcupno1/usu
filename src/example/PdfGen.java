@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -13,6 +14,14 @@ public class PdfGen {
 
         // 1.新建document对象
         Document document = new Document();
+
+        //如果是服务器返回字节数组，不用生成本地文件的话，ByteArrayOutputStream
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+////        PdfWriter writer = PdfWriter.getInstance(document, baos);
+////        //中间设置完，最后输出
+////        return baos.toByteArray();
+
+
 
         // 2.建立一个书写器(Writer)与document对象关联，通过书写器(Writer)可以将文档写入到磁盘中。
         // 创建 PdfWriter 对象 第一个参数是对文档对象的引用，第二个参数是文件的实际名称，在该名称中还会给出其输出路径。
