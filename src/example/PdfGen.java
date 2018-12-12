@@ -17,7 +17,7 @@ public class PdfGen {
         //直接用代码生成
 //        genByCode();
 
-        //通过模板生成
+        //通过模板生成，需要注意的是生成模板的软件要用Acrobat Pro DC ，用福昕的话会有问题，数字显示不出来，不知怎么回事
         genByTemple();
 
     }
@@ -46,9 +46,8 @@ public class PdfGen {
             stamper = new PdfStamper(reader, bos);
             AcroFields form = stamper.getAcroFields();
 
-            String[] str = {"+", "-中文", "《br》", "1994-00-00",
-                    "13"
-                    , "河北省1231唐山市 ","校验码","确认码"};
+            String[] str = {"3500000000009772", "-中文", "《br》", "1994-00-00","300",
+                     "河北省1231唐山市 ","校验码","确认码"};
             int i = 0;
             java.util.Iterator<String> it = form.getFields().keySet().iterator();
             while (it.hasNext()) {
