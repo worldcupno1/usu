@@ -192,8 +192,10 @@ public class Usu {
      */
     @Test
     public void substr(){
-        String s = new String("160122");
+        String s = new String("这个例子不明显呀");
         log.info(s.substring(4,6));
+        log.info(s.substring(s.length() - 1));
+        log.info(s.substring(0).equals(s.substring(0,s.length())));
 
         String u = "1123<returnstatus>success</returnstatus>123333fdfg";
 		System.out.println(u.substring(u.indexOf("<returnstatus>") + 14, u.indexOf("</returnstatus>")));
