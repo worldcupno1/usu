@@ -51,6 +51,11 @@ public class DeployNexus {
     }
 
     public static void main(String[] args) {
+        /*
+        注：这里的仓库地址不能和maven的配置文件settings.xml里的本地仓库地址相同，否则上传会报
+        Cannot deploy artifact from the local repository的错误，
+        只要再将仓库文件夹复制一份出来，用复制文件夹的地址即可。
+         */
         deploy(new File("F:\\.m2\\repository").listFiles());
 //        if(checkArgs(args)){
 //            File file = new File(args[0]);
