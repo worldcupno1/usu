@@ -18,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import test.emax.bean.DeviceMsgJson;
 import test.emax.bean.GroupInfo;
 import test.emax.bean.StepDataFactory;
-import util.HttpUtil;
+import util.http.HttpUtil;
 
 public class TestHttpClient {
 

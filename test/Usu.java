@@ -8,8 +8,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import util.http.HttpClientUtil;
-import util.http.exception.HttpProcessException;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -25,22 +23,6 @@ import java.util.regex.Pattern;
 public class Usu {
 	public static Logger log = LogManager.getLogger(Usu.class);
 
-
-	/**
-	 * Title:  http工具类简单调用<br>
-	 * @author lvm
-	 */
-    @Test
-    public void ge2(){
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            //请求地址注意，要加上http://
-            String result = HttpClientUtil.get(httpclient,"http://www.126.com",null,null,"utf-8");
-            log.info(result);
-        } catch (HttpProcessException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void ge(){

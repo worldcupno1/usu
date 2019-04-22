@@ -1,4 +1,4 @@
-package util;
+package util.http;
 
 /**
  * Created by lvm on 2015/12/14.

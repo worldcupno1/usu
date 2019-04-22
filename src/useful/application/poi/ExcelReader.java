@@ -56,7 +56,7 @@ public class ExcelReader {
 				String[] singleRow = new String[columnNum];
 				int n = 0;
 				for (int i = 0; i < columnNum; i++) {
-					Cell cell = row.getCell(i, Row.CREATE_NULL_AS_BLANK);
+					Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 					switch (cell.getCellType()) {
 					case Cell.CELL_TYPE_BLANK:
 						singleRow[n] = "";

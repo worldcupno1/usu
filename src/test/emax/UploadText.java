@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import util.HttpUtil;
+import util.http.HttpUtil;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;

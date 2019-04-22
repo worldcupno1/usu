@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import test.emax.TestHttpClient;
-import util.HttpUtil;
+import util.http.HttpUtil;
 
 import java.util.Map;
 
