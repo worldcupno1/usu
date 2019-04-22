@@ -19,9 +19,9 @@ public class Common {
 	public static final String NOTEBOOK_NAME ="LVM-NOTEBOOK";
 
 	/** 家里台式机的临时目录 */
-	public static final String PC_HOME_TMP_PATH ="w:/logs/";
+	public static final String PC_HOME_TMP_PATH ="W:/code/logs/";
 	/** 家里台式机的计算机名 */
-	public static final String PC_HOME_NAME ="LVM-NOTEBOOK";
+	public static final String PC_HOME_NAME ="MAX-LV";
 	/** 默认临时目录 */
 	public static final String DEFAULT_TMP_PATH ="c:/usu/";
 
