@@ -1,25 +1,32 @@
 package util.excel;
 
+import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.metadata.Table;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import constant.Common;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import util.file.FileUtil;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 
 /**
  * alibaba的easyExcel导入工具，耗内存少，可用于大数据量的导入，如百万数量级
  */
 public class EasyexcelUtil {
-
+    private static final Logger log = LogManager.getLogger(EasyexcelUtil.class);
 
     /**
      * 每行数据是List<String>无表头
@@ -47,6 +54,7 @@ public class EasyexcelUtil {
 
     /**
      * 有表头,代码直接写死
+     *
      * @throws IOException
      */
     @Test
@@ -82,6 +90,7 @@ public class EasyexcelUtil {
 
     /**
      * 有表头,用实体类，添加注解实现
+     *
      * @throws IOException
      */
     @Test
@@ -189,6 +198,7 @@ public class EasyexcelUtil {
 
     /**
      * 多行表头
+     *
      * @throws IOException
      */
     @Test
@@ -218,31 +228,31 @@ public class EasyexcelUtil {
 
     public static class MultiLineHeadExcelModel extends BaseRowModel {
 
-        @ExcelProperty(value = { "表头1", "表头1", "表头31" }, index = 0)
+        @ExcelProperty(value = {"表头1", "表头1", "表头31"}, index = 0)
         private String p1;
 
-        @ExcelProperty(value = { "表头1", "表头1", "表头32" }, index = 1)
+        @ExcelProperty(value = {"表头1", "表头1", "表头32"}, index = 1)
         private String p2;
 
-        @ExcelProperty(value = { "表头3", "表头3", "表头3" }, index = 2)
+        @ExcelProperty(value = {"表头3", "表头3", "表头3"}, index = 2)
         private String p3;
 
-        @ExcelProperty(value = { "表头4", "表头4", "表头4" }, index = 3)
+        @ExcelProperty(value = {"表头4", "表头4", "表头4"}, index = 3)
         private String p4;
 
-        @ExcelProperty(value = { "表头5", "表头51", "表头52" }, index = 4)
+        @ExcelProperty(value = {"表头5", "表头51", "表头52"}, index = 4)
         private String p5;
 
-        @ExcelProperty(value = { "表头6", "表头61", "表头611" }, index = 5)
+        @ExcelProperty(value = {"表头6", "表头61", "表头611"}, index = 5)
         private String p6;
 
-        @ExcelProperty(value = { "表头6", "表头61", "表头612" }, index = 6)
+        @ExcelProperty(value = {"表头6", "表头61", "表头612"}, index = 6)
         private String p7;
 
-        @ExcelProperty(value = { "表头6", "表头62", "表头621" }, index = 7)
+        @ExcelProperty(value = {"表头6", "表头62", "表头621"}, index = 7)
         private String p8;
 
-        @ExcelProperty(value = { "表头6", "表头62", "表头622" }, index = 8)
+        @ExcelProperty(value = {"表头6", "表头62", "表头622"}, index = 8)
         private String p9;
 
         public String getP1() {
@@ -318,4 +328,33 @@ public class EasyexcelUtil {
         }
     }
 
+
+    /**
+     * 读取excel 03版本通过 ，有java模型映射
+     * @throws FileNotFoundException
+     */
+    @Test
+    public void testExcel2003WithReflectModel() throws FileNotFoundException {
+        InputStream inputStream = FileUtil.getInputStream(Common.getCurrentTempPath() + "loan1.xls");
+        try {
+            // 解析每行结果在listener中处理
+            ExcelListener listener = new ExcelListener();
+
+            ExcelReader excelReader = new ExcelReader(inputStream, ExcelTypeEnum.XLS, null, listener);
+
+            excelReader.read(new Sheet(1, 2, LoanInfo.class));
+            List dataList = listener.getDatas();
+            log.debug(dataList.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
