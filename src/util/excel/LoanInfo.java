@@ -2,10 +2,12 @@ package util.excel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.BaseRowModel;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@ToString
 public class LoanInfo extends BaseRowModel {
     @ExcelProperty(index = 0)
     private String bankLoanId;

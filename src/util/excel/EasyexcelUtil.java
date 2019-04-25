@@ -23,8 +23,14 @@ import java.util.List;
 
 
 /**
- * alibaba的easyExcel导入工具，耗内存少，可用于大数据量的导入，如百万数量级
+ * Title:  excel工具类<br>
+ * Description: alibaba的easyExcel导入工具，耗内存少，可用于大数据量的导入，如百万数量级<br>
+ * Date: 2019\4\25 0025 16:22<br>
+ * Copyright (c)   <br>
+ *
+ * @author lvm
  */
+
 public class EasyexcelUtil {
     private static final Logger log = LogManager.getLogger(EasyexcelUtil.class);
 
@@ -345,6 +351,35 @@ public class EasyexcelUtil {
             excelReader.read(new Sheet(1, 2, LoanInfo.class));
             List dataList = listener.getDatas();
             log.debug(dataList.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 读取excel 07版本通过 ，有java模型映射
+     * @throws FileNotFoundException
+     */
+    @Test
+    public void testExcel2007WithReflectModel() throws FileNotFoundException {
+        InputStream inputStream = FileUtil.getInputStream(Common.getCurrentTempPath() + "loan3.xlsx");
+        try {
+            ExcelListener listener = new ExcelListener();
+            ExcelReader excelReader = new ExcelReader(inputStream, ExcelTypeEnum.XLSX, null, listener);
+//            ExcelReader excelReader = new ExcelReader(inputStream,  null, listener);
+            excelReader.read(new Sheet(1, 1, LoanInfo.class));
+            List<LoanInfo> dataList = listener.getDatas();
+            if (dataList.size() > 0){
+                log.debug(dataList.get(0).toString());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
