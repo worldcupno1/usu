@@ -3,8 +3,6 @@ package util.excel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.metadata.Table;
@@ -13,12 +11,11 @@ import constant.Common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import util.excel.domain.Entity;
 import util.file.FileUtil;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -391,5 +388,31 @@ public class EasyexcelUtil {
             }
         }
 
+    }
+
+    /**
+     * 读取excel文件，根据反射模型返回list数据
+     * @param inputStream 输入流
+     * @param excelType   excel类型，03或者07
+     * @param sheetNo   excel的sheet序号
+     * @param headLineNum   表头有几列
+     * @param clazz 反射模型的class
+     * @return
+     */
+    public static List<?> readExcelWithReflectModel(InputStream inputStream,ExcelTypeEnum excelType,int sheetNo ,
+                                                    int headLineNum,Class<? extends BaseRowModel> clazz){
+        ExcelListener listener = new ExcelListener();
+        ExcelReader excelReader = new ExcelReader(inputStream, excelType, null, listener);
+        excelReader.read(new Sheet(sheetNo, headLineNum, clazz));
+        return listener.getDatas();
+
+    }
+
+    @Test
+    public void testReadExcel() throws FileNotFoundException {
+        InputStream inputStream = FileUtil.getInputStream(Common.getCurrentTempPath() + "社保.xls");
+
+        List<Entity> list = (List<Entity>)readExcelWithReflectModel(inputStream,ExcelTypeEnum.XLS,1,1,Entity.class);
+        log.debug("共有" + list.size() + "条数据");
     }
 }
