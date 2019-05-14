@@ -1,10 +1,13 @@
 package bean;
 
+import bean.entity.User;
+import bean.entity.UserDto;
+import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import test.emax.bean.GroupInfo;
 
@@ -54,5 +57,21 @@ public class Example {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 属性名称、类型都相同的bean拷贝(属性名称相同而类型不同的属性不会被拷贝)
+     */
+    @Test
+    public void normalCopyTest() {
+        // create(Class source, Class target, boolean useConverter)
+        final BeanCopier beanCopier = BeanCopier.create(User.class, UserDto.class, false);
+        User user = new User();
+        user.setAge(10);
+        user.setName("zhangsan");
+        UserDto userDto = new UserDto();
+        beanCopier.copy(user, userDto, null);
+        Assert.assertEquals(10, userDto.getAge());
+        Assert.assertEquals("zhangsan", userDto.getName());
     }
 }

@@ -24,6 +24,13 @@
     </properties>
 
     <dependencies>
+        <!--bean拷贝-->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.2.12</version>
+        </dependency>
+
         <!--收集系统各项底层信息的工具集-->
         <dependency>
             <groupId>org.fusesource</groupId>
