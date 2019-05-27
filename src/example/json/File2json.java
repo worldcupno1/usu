@@ -1,4 +1,4 @@
-package example;
+package example.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -12,8 +12,8 @@ import java.util.HashMap;
 /**文件和json对象转换
  * Created by lvm on 2016/3/1.
  */
-public class file2json {
-    static Logger log = LogManager.getLogger(file2json.class);
+public class File2json {
+    static Logger log = LogManager.getLogger(File2json.class);
     //缓冲区长度
     public static final int BUFFER_SIZE = 1024;
 

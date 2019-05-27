@@ -1,4 +1,4 @@
-package example;
+package example.pdf;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
