@@ -1,21 +1,18 @@
 /**
  * 
  */
-package example.json;
+package str.json;
 
-import java.util.*;
-
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import constant.Common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import org.junit.Test;
-import test.weixin.*;
+
+import java.util.*;
 
 /**
  * @author lvm
