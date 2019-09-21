@@ -7,6 +7,7 @@ import util.http.HttpUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Title:  api测试类 <br>
@@ -33,12 +34,16 @@ public class TestAll {
      * 小修保养列表
      */
     static final String LIST_GLYH_TASK = "/glyh/task/glyhTask";
+    /**
+     * 小修保养，保存
+     */
+    static final String SAVE_GLYH_TASK = LIST_GLYH_TASK + "/save";
 
     /**
      * 登录测试
      */
     @Test
-    public void login() throws IOException {
+    public void login() {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user","first");
         params.put("password","c6c57330f983ed4b44c8bba1ee87d1e05574dcd9e391791a2b132770");
@@ -54,4 +59,20 @@ public class TestAll {
         String result = HttpUtil.httpGet(LOCAL_HEADER + LIST_GLYH_TASK);
         log.info(result);
     }
+
+    @Test
+    public void saveGlyhTask(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user","first");
+        params.put("password","c6c57330f983ed4b44c8bba1ee87d1e05574dcd9e391791a2b132770");
+        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + SAVE_GLYH_TASK,params,"UTF-8");
+        log.info(result);
+    }
+
+    @Test
+    public void getGlyhRoadInfo(){
+        String result = HttpUtil.httpGet(LOCAL_HEADER + "/glyh/datacard/glyhRoadInfo/get?id=34a44a9e2cd34edeb0d9fc1f1110023d");
+        log.info(result);
+    }
+
 }

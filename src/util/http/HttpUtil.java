@@ -1,6 +1,6 @@
 package util.http;
 
-import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -9,10 +9,12 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -23,9 +25,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
 
 /**
  * Title:  http工具类<br>
@@ -39,8 +45,12 @@ import java.util.zip.GZIPOutputStream;
 public class HttpUtil {
     private static Logger log = LogManager.getLogger(HttpUtil.class);
 
-    private static final int HTTP_STATUS_CODE_2 = 200;
-    private static final int HTTP_STATUS_CODE_3 = 300;
+    private static final int HTTP_STATUS_CODE_200 = 200;
+    private static final int HTTP_STATUS_CODE_300 = 300;
+    /**
+     * 超时时间
+     */
+    private static final int TIMEOUT = 5000;
 
     /**
      * utf-8编码
@@ -51,7 +61,7 @@ public class HttpUtil {
                 throws HttpResponseException, IOException {
             final StatusLine statusLine = response.getStatusLine();
             final HttpEntity entity = response.getEntity();
-            if (statusLine.getStatusCode() >= HTTP_STATUS_CODE_3) {
+            if (statusLine.getStatusCode() >= HTTP_STATUS_CODE_300) {
                 EntityUtils.consume(entity);
                 throw new HttpResponseException(statusLine.getStatusCode(),
                         statusLine.getReasonPhrase());
@@ -79,7 +89,7 @@ public class HttpUtil {
                 public String handleResponse(final HttpResponse response)
                         throws ClientProtocolException, IOException {
                     int status = response.getStatusLine().getStatusCode();
-                    if (status >= HTTP_STATUS_CODE_2 && status < HTTP_STATUS_CODE_3) {
+                    if (status >= HTTP_STATUS_CODE_200 && status < HTTP_STATUS_CODE_300) {
                         HttpEntity entity = response.getEntity();
                         return entity != null ? EntityUtils.toString(entity)
                                 : null;
@@ -110,46 +120,28 @@ public class HttpUtil {
     }
 
 
-
-    public static void httpPost() throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        String url = "http://localhost:8080/device";
-//        String url = "http://121.40.218.161/wechat";
-//        url = url.replace("ATOKEN","Wmh4OcP7fhrzwn-LzXw-dKpNnC-4x82B6FXWVD__mcRbE1IsvdWn-C9F2mNGAr21EiTrsq8XiHYUFUosmYH13wQqq8RnUJQadSfn0kVCrYSW5Q40UIAJ0kHBPFb2GPkzDPRbACALXZ");
-        HttpPost httppost = new HttpPost(url);
-
-        HashMap<String, Object> paraMap = new HashMap<String, Object>(16);
-        ArrayList<String> deviceIdList = new ArrayList<String>();
-        deviceIdList.add("EZON_S1_FFFFEC");
-
-        paraMap.put("device_num", "1");
-        paraMap.put("deviceIdList", deviceIdList);
-
-        StringEntity myEntity = new StringEntity(JSONObject.toJSONString(paraMap), "UTF-8");
-        httppost.addHeader("Content-Type", "text/json");
-        httppost.setEntity(myEntity);
-        HttpResponse response = httpclient.execute(httppost);
-        HttpEntity resEntity = response.getEntity();
-        InputStreamReader reader = new InputStreamReader(resEntity.getContent(), "UTF-8");
-        char[] buff = new char[1024];
-        int length = 0;
-        while ((length = reader.read(buff)) != -1) {
-            log.info(new String(buff, 0, length));
-        }
-        httpclient.close();
-    }
-
-    /*
+    /**
      * 利用HttpClient进行post请求的工具类
+     * @param url
+     * @param map 参数map
+     * @param charset 编码
+     * @return
      */
-    public String doPostWithMap(String url, Map<String,String> map, String charset){
-        HttpClient httpClient = null;
-        HttpPost httpPost = null;
+    public static String doPostWithMap(String url, Map<String,Object> map, String charset){
+        CloseableHttpClient httpClient =  HttpClients.createDefault();
+        //配置超时时间
+        RequestConfig requestConfig = RequestConfig.custom().
+                setConnectTimeout(TIMEOUT).setConnectionRequestTimeout(TIMEOUT)
+                .setSocketTimeout(TIMEOUT).setRedirectsEnabled(true).build();
+        HttpPost httpPost = new HttpPost(url);
+        //设置超时时间
+        httpPost.setConfig(requestConfig);
         String result = null;
+        if (StringUtils.isBlank(charset)){
+            charset = "UTF-8";
+        }
         try{
-            httpClient = new SSLClient();
-            httpPost = new HttpPost(url);
-            //设置参数
+            //装配post请求参数
             List<NameValuePair> list = new ArrayList<NameValuePair>();
             Iterator iterator = map.entrySet().iterator();
             while(iterator.hasNext()){
@@ -173,7 +165,12 @@ public class HttpUtil {
         return result;
     }
 
-    //gzip压缩的post提交
+    /**
+     * 支持gzip压缩的post提交
+     * @param url
+     * @param params
+     * @throws IOException
+     */
     public static void httpGzipPost(String url, String params) throws IOException{
         CloseableHttpClient http = HttpClients.createDefault();
         HttpPost httpost = new HttpPost(url);
@@ -210,7 +207,7 @@ public class HttpUtil {
     }
 
     /**
-     * post提交
+     * 带body的post提交
      * @param url
      * @param body
      * @return
@@ -233,16 +230,22 @@ public class HttpUtil {
     }
 
 
-
-    //模拟带文件表单post提交
+    /**
+     * 模拟带文件表单post提交
+     * @param url 提交url
+     * @param filePath 文件地址
+     * @return
+     * @throws IOException
+     */
     public static String postMultipartEntity(String url,File filePath) throws IOException {
         // 开启一个客户端 HTTP 请求
         CloseableHttpClient httpclient = HttpClients.createDefault();
         //创建 HTTP POST 请求
         HttpPost post = new HttpPost(url);
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        // file，类似表单中的name的值，后台通过这个名字取文件
+        builder.addBinaryBody("file",new FileInputStream(filePath), ContentType.MULTIPART_FORM_DATA, "fileName");
         builder.addTextBody("param1","中国");
-        builder.addBinaryBody("files",filePath);
         builder.addTextBody("method","uploadFile");
         // 生成 HTTP POST 实体
         HttpEntity entity = builder.build();
@@ -250,7 +253,7 @@ public class HttpUtil {
         // 发起请求 并返回请求的响应
         HttpResponse response = httpclient.execute(post);
         int status = response.getStatusLine().getStatusCode();
-        if (status >= HTTP_STATUS_CODE_2 && status < HTTP_STATUS_CODE_3) {
+        if (status >= HTTP_STATUS_CODE_200 && status < HTTP_STATUS_CODE_300) {
             HttpEntity responseEntity = response.getEntity();
             return responseEntity != null ? EntityUtils.toString(responseEntity)
                     : null;
