@@ -106,4 +106,12 @@ public class TestAll {
         log.info(result);
     }
 
+    @Test
+    public void routineDetailsDeta(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("pageNo","1");
+        params.put("pageSize","30");
+        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/routine/glyhRoutineDetailsDeta",params,"UTF-8");
+        log.info(result);
+    }
 }
