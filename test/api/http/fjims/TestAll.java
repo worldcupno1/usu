@@ -25,7 +25,11 @@ public class TestAll {
     /**
      * 本地头
      */
-    static final String LOCAL_HEADER = "http://localhost:28080/glyh/api";
+    static final String LOCAL_HEADER = "http://localhost:28080/glyh4pingtan/api";
+    /**
+     * 生产头
+     */
+    static final String PROD_HEADER = "http://47.110.124.233:8080/glyh4pingtan/api";
 
     /**
      * 登录
@@ -114,4 +118,46 @@ public class TestAll {
         String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/routine/glyhRoutineDetailsDeta",params,"UTF-8");
         log.info(result);
     }
+
+    @Test
+    public void eventsReport(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+//        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/eventsReport/selectDisease",params,"UTF-8");
+//        String result = HttpUtil.doPostWithMap(PROD_HEADER + "/eventsReport/selectDisease",params,"UTF-8");
+//        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/eventsReport/selectAllRoad",params,"UTF-8");
+        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/eventsReport/selectEventsList",params,"UTF-8");
+        log.info(result);
+    }
+
+    @Test
+    public void report(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("reportPerso","本地测试");
+        params.put("address","福建省交通建设工程试验检测有限公司(福州市)");
+        params.put("diseaseDescription","这只是一个测试");
+        params.put("diseaseType","桥梁病害12");
+        params.put("remarks","11322222222");
+        params.put("unionId","1234567890");
+        params.put("location","120.884,45.787");
+//        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/eventsReport/report",params,"UTF-8");
+        String result = HttpUtil.doPostWithMap(PROD_HEADER + "/eventsReport/report",params,"UTF-8");
+        log.info(result);
+    }
+
+    @Test
+    public void workCalendar(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+
+        String result = HttpUtil.doPostWithMap("http://localhost:28080/glyh4pingtan/a/glyh/calendar/workCalendar/json",params,"UTF-8");
+        log.info(result);
+    }
+
+    @Test
+    public void simple(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+//        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/disease/glyhDisease/list",params,"UTF-8");
+        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/management/glyhManagement/list",params,"UTF-8");
+        log.info(result);
+    }
+
 }
