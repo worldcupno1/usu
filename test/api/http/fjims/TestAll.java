@@ -133,7 +133,7 @@ public class TestAll {
     public void report(){
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("reportPerso","本地测试");
-        params.put("address","福建省交通建设工程试验检测有限公司(福州市)");
+        params.put("address","人品检测公司");
         params.put("diseaseDescription","这只是一个测试");
         params.put("diseaseType","桥梁病害12");
         params.put("remarks","11322222222");
@@ -157,6 +157,15 @@ public class TestAll {
         HashMap<String, Object> params = new HashMap<String, Object>();
 //        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/disease/glyhDisease/list",params,"UTF-8");
         String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/glyh/management/glyhManagement/list",params,"UTF-8");
+        log.info(result);
+    }
+
+    @Test
+    public void testEndPatrol() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("type","0");
+        params.put("glyhRoutineDetailsId","e1cece7f569144dc8ee643416213cc03");
+        String result = HttpUtil.doPostWithMap(LOCAL_HEADER + "/patrol/endPatrol",params,"UTF-8");
         log.info(result);
     }
 
