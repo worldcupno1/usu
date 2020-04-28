@@ -3,6 +3,7 @@ package collection;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -17,6 +18,23 @@ import java.util.*;
 public class Example {
     public static Logger log = LogManager.getLogger(Example.class);
 
+    /**
+     * 判断集合是否非空
+     */
+    @Test
+    public void testCollectionIsEmpty(){
+        ArrayList<String> list =  new ArrayList();
+        list.add("first");
+        /** 判断集合是否为空 **/
+        log.debug(CollectionUtils.isEmpty(null));
+        log.debug(CollectionUtils.isEmpty(new ArrayList()));
+        log.debug(CollectionUtils.isEmpty(list));
+        /** 判断集合是否不为空 **/
+        log.debug("check if not empty");
+        log.debug(CollectionUtils.isNotEmpty(null));
+        log.debug(CollectionUtils.isNotEmpty(new ArrayList()));
+        log.debug(CollectionUtils.isNotEmpty(list));
+    }
 
     /**
      * guava比较器链ComparisonChain的使用
