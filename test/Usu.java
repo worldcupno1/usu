@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -257,6 +258,12 @@ public class Usu {
         String url = "uid=9383&sdi=9393&jd=确实啊&djf=opoi&";
         String []ary = StringUtils.split(url,"&");
         log.info(ary.length);
+
+        url = "c://opt//upFiles/2020/04/28/bb8df0ac-d741-4431-8e87-39a80baabd64\\jeecgboot.2019-11-20.log";
+        ary = StringUtils.split(url,File.separator);
+        log.info(ary[ary.length - 1]);
+        log.info("File.separator=" + File.separator);
+        log.info("File.pathSeparator=" + File.pathSeparator);
     }
 
     //随机字符串产生
