@@ -1,5 +1,6 @@
 package collection;
 
+import bean.entity.User;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import useful.bean.Employee;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 集合类的各种方法测试
@@ -17,6 +19,25 @@ import java.util.*;
  */
 public class Example {
     public static Logger log = LogManager.getLogger(Example.class);
+
+
+    /**
+     * java8从list集合中取出某一属性的值的集合案例
+     */
+    @Test
+    public void tes() {
+        List<User> list = new ArrayList<User>();
+        User o1 = new User().setAge(1).setName("MCS-2019-1123");
+        list.add(o1);
+        User o2 = new User().setAge(2).setName("MCS-2019-1124");
+        list.add(o2);
+        User o3 = new User().setAge(3).setName("MCS-2019-1125");
+        list.add(o3);
+        List<String> nameList = list.stream().map(User::getName).collect(Collectors.toList());
+        log.info("nameList：" + nameList);
+        List<Integer> ageList = list.stream().map(User::getAge).collect(Collectors.toList());
+        log.info("ageList：" + ageList);
+    }
 
     /**
      * 判断集合是否非空
