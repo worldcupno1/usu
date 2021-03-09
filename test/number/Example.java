@@ -109,4 +109,28 @@ public class Example {
         log.info("sum=" + sum);
     }
 
+    /**
+     * 关于BigDecimal 和 0
+     */
+    @Test
+    public void aboutZero(){
+        BigDecimal a = new BigDecimal(0.1);
+        log.info(0.1 == a.doubleValue());
+        log.info(a.equals(new BigDecimal(0.1)));
+
+        BigDecimal b = new BigDecimal(0.0);
+        log.info(0.0 == b.doubleValue());
+        log.info(b.equals(new BigDecimal(0.0)));
+        /*
+            这个错误一般出现在BigDecimal的除法运算中，如：
+            像这样不做小数位数处理的话就有可能会报错
+            BigDecimal result= num1.divide(num2)
+        正确的：
+            //设置了保留几位，这里是两位✔
+            BigDecimal result= num1.divide(num2,2)；
+         */
+
+
+    }
+
 }
