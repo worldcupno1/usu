@@ -1,6 +1,9 @@
 package util.huTool;
 
+import cn.hutool.http.HttpUtil;
 import cn.hutool.script.ScriptUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 /**
@@ -32,6 +35,7 @@ import org.junit.Test;
  */
 
 public class TestCase {
+    private static Logger log = LogManager.getLogger(TestCase.class);
 
     /**
      * ScriptUtil.eval 执行Javascript脚本，参数为脚本字符串
@@ -39,6 +43,13 @@ public class TestCase {
     @Test
     public void  testScriptUtil(){
         ScriptUtil.eval("print('Script 测试!');");
+    }
+
+    @Test
+    public void http() {
+        //GET请求
+        String content = HttpUtil.get("http://www.weather.com.cn/data/sk/101230103.html");
+        log.info(content);
     }
 
 }
