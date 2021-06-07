@@ -19,7 +19,7 @@
         <commons-io.version>2.5</commons-io.version>
         <guava.version>21.0</guava.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <lombok.version>1.18.18</lombok.version>
     </properties>
 
