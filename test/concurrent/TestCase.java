@@ -1,8 +1,14 @@
 package concurrent;
 
 import java.util.concurrent.CountDownLatch;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.redisson.Redisson;
+import org.redisson.api.RBucket;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 
 /**
  * Title: 并发简单测试 <br>
@@ -16,6 +22,13 @@ public class TestCase {
   private static final Logger log = LogManager.getLogger(TestCase.class);
 
   public static void main(String[] args) throws InterruptedException {
+    //
+    Config config = new Config();
+    String redisUrl = String.format("redis://%s:%s", "127.0.0.1", "6379");
+    config.useSingleServer().setAddress(redisUrl);
+    config.useSingleServer().setDatabase(3);
+    RedissonClient redisson = Redisson.create(config);
+
     Runnable taskTemp =
         new Runnable() {
           // 注意，此处是非线程安全的，留坑
@@ -23,26 +36,43 @@ public class TestCase {
 
           @Override
           public void run() {
-            for (int i = 0; i < 10; i++) {
-              // 发起请求，HttpClientOp.doGet("https://www.baidu.com/");
-              iCounter++;
-              System.out.println(
-                  System.nanoTime()
-                      + " ["
-                      + Thread.currentThread().getName()
-                      + "] iCounter = "
-                      + iCounter);
-              try {
-                Thread.sleep(100);
-              } catch (InterruptedException e) {
-                log.error(e.getMessage());
+            log.info(Thread.currentThread().getName());
+              //
+              //              iCounter++;
+              //              System.out.println(
+              //                  System.nanoTime()
+              //                      + " ["
+              //                      + Thread.currentThread().getName()
+              //                      + "] iCounter = "
+              //                      + iCounter);
+              RLock lock = redisson.getLock("uploadFileLock");
+              while (!lock.isLocked()) {
+                lock.lock();
+                try {
+                  RBucket<String> bucket = redisson.getBucket("anyObject");
+                  if (StringUtils.isNotBlank(bucket.get())) {
+                    bucket.set(bucket.get() + "我是第" + Thread.currentThread().getName() + "号线程;");
+                  } else {
+                    bucket.set("我是第" + Thread.currentThread().getName() + "号线程;");
+                  }
+                  Thread.sleep(100);
+                } catch (InterruptedException e) {
+                  log.error(e.getMessage());
+                } finally {
+                  lock.unlock();
+                  break;
+                }
               }
-            }
+
           }
         };
 
     TestCase testCase = new TestCase();
     testCase.startTaskAllInOnce(5, taskTemp);
+
+    RBucket<String> result = redisson.getBucket("anyObject");
+    log.info("结果是:" + result.get());
+    System.exit(0);
   }
 
   public long startTaskAllInOnce(int threadNums, final Runnable task) throws InterruptedException {
