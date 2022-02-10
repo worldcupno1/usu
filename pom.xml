@@ -11,7 +11,7 @@
         <commons-lang3.version>3.5</commons-lang3.version>
         <commons-net.version>3.3</commons-net.version>
         <log4j2.version>2.3</log4j2.version>
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
+        <postgresql.version>42.2.25</postgresql.version>
         <fastjson.version>1.2.45</fastjson.version>
         <jedis.version>2.7.3</jedis.version>
         <commons-codec.version>1.10</commons-codec.version>
