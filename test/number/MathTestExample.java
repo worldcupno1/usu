@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 /**
- *
+ *  Math的一些函数测试
  */
 public class MathTestExample {
     public static Logger log = LogManager.getLogger(MathTestExample.class);
