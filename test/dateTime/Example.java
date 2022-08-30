@@ -184,4 +184,16 @@ public class Example {
         c.add(Calendar.DATE, -day_of_week + 1);
         log.info(f.format(c.getTime()));
     }
+
+    /**
+     * 获取当前utc时间，北京东八区
+     */
+    @Test
+    public void getUTC(){
+        log.info("".replace(";","2"));
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.add(Calendar.HOUR_OF_DAY, -8);
+        log.info("当前utc时间=" + new SimpleDateFormat("yyyyMMddHHmmss").format(cal.getTimeInMillis()));
+    }
 }
