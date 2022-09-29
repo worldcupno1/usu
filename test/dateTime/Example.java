@@ -1,5 +1,6 @@
 package dateTime;
 
+import cn.hutool.core.date.DateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,8 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
+import static java.time.ZoneOffset.UTC;
+
 /**
  * Created by unique-lv on 2016/3/20.
  */
@@ -19,6 +22,17 @@ public class Example {
 
     public static final String common = "yyyy-MM-dd HH:mm:ss";
     public static final String rankDateFormat = "yyMMdd";
+
+    @Test
+    public void useHutools(){
+        //当前格林威治时间
+        // 获取格林威治标准时区
+        TimeZone timeZone1 = TimeZone.getTimeZone("GMT");
+        //设置程序的默认时区是 格林威治标准时区
+        TimeZone.setDefault(timeZone1);
+        log.info("当前utc时间是" + DateUtil.now());
+    }
+
 
     /**
      * 毫秒数和日期字符串互转
@@ -185,15 +199,4 @@ public class Example {
         log.info(f.format(c.getTime()));
     }
 
-    /**
-     * 获取当前utc时间，北京东八区
-     */
-    @Test
-    public void getUTC(){
-        log.info("".replace(";","2"));
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.add(Calendar.HOUR_OF_DAY, -8);
-        log.info("当前utc时间=" + new SimpleDateFormat("yyyyMMddHHmmss").format(cal.getTimeInMillis()));
-    }
 }
