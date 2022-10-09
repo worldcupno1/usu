@@ -23,14 +23,23 @@ public class Example {
     public static final String common = "yyyy-MM-dd HH:mm:ss";
     public static final String rankDateFormat = "yyMMdd";
 
+    /**
+     * 时区转换
+     */
     @Test
     public void useHutools(){
-        //当前格林威治时间
         // 获取格林威治标准时区
-        TimeZone timeZone1 = TimeZone.getTimeZone("GMT");
-        //设置程序的默认时区是 格林威治标准时区
-        TimeZone.setDefault(timeZone1);
-        log.info("当前utc时间是" + DateUtil.now());
+        TimeZone timeZoneUTC = TimeZone.getTimeZone("GMT");
+        //北京时间
+        TimeZone timeZone = TimeZone.getDefault();
+        //更改默认时区，因为时区是缓存的，会造成其他的比如new Date()的时区变更
+//        TimeZone.setDefault(timeZoneUTC);
+        SimpleDateFormat format1 = new SimpleDateFormat(common);
+        format1.setTimeZone(timeZoneUTC);
+        log.info("当前utc时间是" + format1.format(new Date()));
+        format1.setTimeZone(timeZone);
+        log.info("本地时间是" + format1.format(new Date()));
+        log.info("hutools,当前本地时间是" + DateUtil.now());
     }
 
 
