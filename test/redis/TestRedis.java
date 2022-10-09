@@ -4,6 +4,8 @@ package redis;
  * Created by Administrator on 2015/9/24.
  */
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TestRedis {
+    private static Logger log = LogManager.getLogger(TestRedis.class);
     private Jedis jedis;
 
     @Before
@@ -98,6 +101,8 @@ public class TestRedis {
         jedis.rpush("java framework", "struts");
         jedis.rpush("java framework", "hibernate");
         System.out.println(jedis.lrange("java framework", 0, -1));
+        List<String> stringList = jedis.lrange("java framework", 0, -1);
+        log.info("list长度为" + stringList.size());
     }
 
     /**
