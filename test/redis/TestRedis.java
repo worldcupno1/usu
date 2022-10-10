@@ -95,6 +95,11 @@ public class TestRedis {
         //再取出所有数据jedis.lrange是按范围取出，
         // 第一个是key，第二个是起始位置，第三个是结束位置，jedis.llen获取长度 -1表示取得所有
         System.out.println(jedis.lrange("java framework", 0, -1));
+        while (jedis.exists("java framework")){
+            jedis.lpop("java framework");
+        }
+
+        log.info(jedis.exists("java framework"));
 
         jedis.del("java framework");
         jedis.rpush("java framework", "spring");
@@ -145,4 +150,31 @@ public class TestRedis {
         RedisUtil.getJedis().set("newname", "中文测试");
         System.out.println(RedisUtil.getJedis().get("newname"));
     }*/
+
+    @Test
+    public void printAndPop() {
+        int n = 60;
+        while (0 <= n){
+            String str = jedis.lpop("list");
+            log.info("打印字符串{},n={}",str,n);
+            try {
+                Thread.sleep(1500);
+                n-- ;
+            } catch (Exception ex) {
+                log.error("出错", ex);
+            }
+        }
+    }
+
+    @Test
+    public void push() {
+        for (int i = 0; i < 60; i++) {
+            jedis.rpush("list",String.valueOf(i));
+            try {
+                Thread.sleep(1000);
+            } catch (Exception ex) {
+                log.error("push出错", ex);
+            }
+        }
+    }
 }
