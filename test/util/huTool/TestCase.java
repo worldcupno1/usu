@@ -1,5 +1,8 @@
 package util.huTool;
 
+import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.lang.Console;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.script.ScriptUtil;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +53,37 @@ public class TestCase {
         //GET请求
         String content = HttpUtil.get("http://www.weather.com.cn/data/sk/101230103.html");
         log.info(content);
+    }
+
+    /**
+     * 统计操作耗时
+     */
+    @Test
+    public void testTimer(){
+        TimeInterval timer = cn.hutool.core.date.DateUtil.timer();
+        /**
+         *   执行过程
+         *
+         */
+        //直接根据API方法和使用情况来获取时间操作计时器
+        timer.interval();//花费毫秒数
+        timer.intervalRestart();//返回花费时间，并重置开始时间
+        timer.intervalMinute();//花费分钟数
+
+        //这个是多个分组的
+        TimeInterval timer2 = new TimeInterval();
+
+        // 分组1
+        timer2.start("1");
+        ThreadUtil.sleep(800);
+
+        // 分组2
+        timer2.start("2");
+        ThreadUtil.sleep(900);
+
+        Console.log("Timer 1 took {} ms", timer.intervalMs("1"));
+        Console.log("Timer 2 took {} ms", timer.intervalMs("2"));
+
     }
 
 }
